@@ -12,7 +12,7 @@ const JWT_SECRET = "vaibhavmagar123";
 //ROUTE 1 : Create a User using : POST " /api/auth/createuser". Doesn't require auth - No Login Required
 
 router.post(
-  "/createuser",
+  "/signup",
   [
     body("name", "Enter a valid name").isLength({ min: 5 }),
     body("email", "Enter a valid email").isEmail(),
@@ -128,12 +128,3 @@ router.post("/getuser", fetchUser, async (req, res) => {
 });
 
 module.exports = router;
-
-/*
-
-{
-  "email": "harryyyy123@gmail.com",
-  "password": "haryyyy1232"
-}
-
-*/

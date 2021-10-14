@@ -1,25 +1,25 @@
 const express = require("express");
 const router = express.Router();
 const fetchUser = require("../middlewares/fetchUser");
-const Note = require("../models/Note");
+const Todo = require("../models/Todos");
 const { body, validationResult } = require("express-validator");
 
-//ROUTE 1 : Get all notes  : GET " /api/notes/fetchAllNotes" Login Required
+//ROUTE 1 : Get all todos  : GET " /api/todos/fetchAllTodos" Login Required
 
-router.get("/fetchallnotes", fetchUser, async (req, res) => {
+router.get("/todos", fetchUser, async (req, res) => {
   try {
-    const notes = await Note.find({ user: req.user.id });
-    res.json(notes);
+    const todos = await Todo.find({ user: req.user.id });
+    res.json(todos);
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
   }
 });
 
-//ROUTE 2 : Add a new note  : POST " /api/notes/addnote" Login Required
+//ROUTE 2 : Add a new todo  : POST " /api/todos/addnote" Login Required
 
 router.post(
-  "/addnote",
+  "/todos",
   fetchUser,
   [
     body("title", "Enter a valid title").isLength({ min: 5 }),
@@ -40,16 +40,16 @@ router.post(
         return res.status(400).json({ errors: errors.array() });
       }
 
-      const note = new Note({
+      const todo = new Todo({
         title,
         description,
         tag,
         user: req.user.id,
       });
 
-      const savedNote = await note.save();
+      const savedTodo = await todo.save();
 
-      res.json(savedNote);
+      res.json(savedTodo);
     } catch (error) {
       console.error(error.message);
       res.status(500).send("Internal Server Error");
@@ -57,68 +57,68 @@ router.post(
   }
 );
 
-//ROUTE 3 : Update an existing note  : POST " /api/notes/updatenote" Login Required
+//ROUTE 3 : Update an existing todo  : POST " /api/todos/updatenote" Login Required
 
-router.put("/updatenote/:id", fetchUser, async (req, res) => {
+router.put("/todos/:id", fetchUser, async (req, res) => {
   const { title, description, tag } = req.body;
 
   try {
-    //create a newNote Object
-    const newNote = {};
+    //create a newTodo Object
+    const newTodo = {};
     if (title) {
-      newNote.title = title;
+      newTodo.title = title;
     }
     if (description) {
-      newNote.description = description;
+      newTodo.description = description;
     }
     if (tag) {
-      newNote.tag = tag;
+      newTodo.tag = tag;
     }
 
     //Find the noSte which is to be updated and update it
-    let note = await Note.findById(req.params.id);
+    let todo = await Todo.findById(req.params.id);
 
-    if (!note) {
+    if (!todo) {
       return res.status(404).send("Not found");
     }
 
-    if (note.user.toString() != req.user.id) {
+    if (todo.user.toString() != req.user.id) {
       return res.status(401).send("Not Allowed");
     }
 
-    note = await Note.findByIdAndUpdate(
+    todo = await Todo.findByIdAndUpdate(
       req.params.id,
-      { $set: newNote },
+      { $set: newTodo },
       { new: true }
     );
 
-    res.json({ note });
+    res.json({ todo });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
   }
 });
 
-//ROUTE 4 : Delete an existing note  : DELETE " /api/notes/updatenote" Login Required
+//ROUTE 4 : Delete an existing todo  : DELETE " /api/todos/updatenote" Login Required
 
-router.delete("/deletenote/:id", fetchUser, async (req, res) => {
+router.delete("/todos/:id", fetchUser, async (req, res) => {
   const { title, description, tag } = req.body;
 
   try {
     //Find the noSte which is to be updated and update it
-    let note = await Note.findById(req.params.id);
+    let todo = await Todo.findById(req.params.id);
 
-    if (!note) {
+    if (!todo) {
       return res.status(404).send("Not found");
     }
 
-    if (note.user.toString() != req.user.id) {
+    if (todo.user.toString() != req.user.id) {
       return res.status(401).send("Not Allowed");
     }
 
-    note = await Note.findByIdAndDelete(req.params.id);
+    todo = await Todo.findByIdAndDelete(req.params.id);
 
-    res.json({ Success: "Note has been deleted" });
+    res.json({ Success: "Todo has been deleted" });
   } catch (error) {
     console.error(error.message);
     res.status(500).send("Internal Server Error");
