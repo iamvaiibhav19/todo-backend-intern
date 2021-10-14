@@ -1,18 +1,26 @@
-import React, { useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import React from "react";
+import { Link, useLocation, useHistory } from "react-router-dom";
+import styled from "styled-components";
+
+const Button = styled.button`
+  border: 1px solid;
+`;
 
 export const Navbar = () => {
-  let location = useLocation();
-  useEffect(() => {
-    console.log(location.pathname);
-  }, [location]);
+  let history = useHistory();
 
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    history.push("/login");
+  };
+
+  let location = useLocation();
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">
           <Link className="navbar-brand" to="/">
-            iNotebook
+            NoteMe
           </Link>
           <button
             className="navbar-toggler"
@@ -38,25 +46,11 @@ export const Navbar = () => {
                   Home
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link
-                  className={`nav-link ${
-                    location.pathname === "/about" ? "active" : ""
-                  }`}
-                  to="/about"
-                >
-                  About
-                </Link>
-              </li>
             </ul>
-            <form className="d-flex">
-              <Link className="btn btn-primary mx-2" to="/login" role="button">
-                Login
-              </Link>
-              <Link className="btn btn-primary mx-2" to="/signup" role="button">
-                SignUp
-              </Link>
-            </form>
+
+            {!localStorage.getItem("token") ? null : (
+              <Button onClick={handleLogout}>Logout</Button>
+            )}
           </div>
         </div>
       </nav>

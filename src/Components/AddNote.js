@@ -1,5 +1,62 @@
 import React, { useContext, useState } from "react";
 import noteContext from "../context/Notes/noteContext";
+import styled from "styled-components";
+
+const Divv = styled.div`
+  background-color: #67809f;
+  width: 40%;
+  position: absolute;
+  right: 900px;
+
+  height: 88vh;
+  bottom: 51px;
+`;
+
+const Div = styled.div`
+  display: block;
+  border: 3px solid #f7ca18;
+  width: 40%;
+  /* position: relative;
+  right: 85px;
+  top: 40px; */
+  /* margin: auto; */
+  height: 480px;
+  font-size: 1.2rem;
+  background-color: #f7ca18;
+`;
+
+const Div2 = styled.div`
+  width: 90%;
+  margin: auto;
+  color: white;
+`;
+
+const Heading = styled.h1`
+  /* font-family: "Italianno", cursive; */
+  color: white;
+  text-align: center;
+  margin-top: 35px;
+  font-size: 2.2rem;
+  /* border-left: 5px solid #f0a500; */
+`;
+
+const Button = styled.button`
+  background-color: #00b16a;
+  color: white;
+  border-radius: 5px;
+  padding: 5px 10px;
+  margin-top: 12px;
+  margin-left: 25px;
+  width: 90%;
+  border: none;
+  &:hover {
+    background-color: #1e824c;
+  }
+`;
+
+const P = styled.p`
+  font-size: 1rem;
+`;
 
 const AddNote = () => {
   const context = useContext(noteContext);
@@ -29,11 +86,11 @@ const AddNote = () => {
   };
 
   return (
-    <div>
-      <div className="container my-3">
-        <h2>Add a note</h2>
+    <>
+      <Div>
+        <Heading>Add a note</Heading>
         <form>
-          <div className="mb-3">
+          <Div2 className="mb-3">
             <label htmlFor="title" className="form-label">
               Title
             </label>
@@ -48,8 +105,8 @@ const AddNote = () => {
               minLength={5}
               required
             />
-          </div>
-          <div className="mb-3">
+          </Div2>
+          <Div2 className="mb-3">
             <label htmlFor="description" className="form-label">
               Description
             </label>
@@ -63,8 +120,8 @@ const AddNote = () => {
               minLength={5}
               required
             />
-          </div>
-          <div className="mb-3">
+          </Div2>
+          <Div2 className="mb-3">
             <label htmlFor="tag" className="form-label">
               Tag
             </label>
@@ -78,19 +135,18 @@ const AddNote = () => {
               minLength={5}
               required
             />
-          </div>
+          </Div2>
 
-          <button
-            disabled={note.title.length < 5 || note.description.length < 5}
+          <Button
+            // disabled={note.title.length < 5 || note.description.length < 5}
             type="submit"
-            className="btn btn-primary"
             onClick={handleClick}
           >
             Add Note
-          </button>
+          </Button>
         </form>
-      </div>
-    </div>
+      </Div>
+    </>
   );
 };
 
